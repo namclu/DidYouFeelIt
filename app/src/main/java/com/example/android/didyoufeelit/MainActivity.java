@@ -61,12 +61,23 @@ public class MainActivity extends AppCompatActivity {
     private class FetchEarthquakeTask extends AsyncTask<String, Void, Event> {
 
         @Override
-        protected Event doInBackground(String... strings) {
+        protected Event doInBackground(String... urls) {
 
-            return Utils.fetchEarthquakeData(strings[0]);
+            // Submit task only if array has at least 1 entry or first entry is not null
+            if (urls.length < 1 || urls[0] == null) {
+                return null;
+            }
+
+            return Utils.fetchEarthquakeData(urls[0]);
         }
 
         protected void onPostExecute(Event earthquake) {
+
+            // Return early if there is no earthquake result
+            if (earthquake == null) {
+                return;
+            }
+
             updateUi(earthquake);
         }
     }
